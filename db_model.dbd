@@ -1,0 +1,53 @@
+# Modify this code to update the DB schema diagram.
+# To reset the sample schema, replace everything with
+# two dots ('..' - without quotes).
+
+car_make_tbl
+-
+make_id PK int
+make string INDEX
+
+
+car_model_tbl
+-
+model_id PK int
+model string INDEX
+
+
+car_year_tbl
+-
+year_id PK int
+year string INDEX
+
+
+car_colour_tbl
+-
+colour_id PK int
+colour string INDEX
+
+
+car_gear_tbl
+-
+gear_id PK int
+gear string INDEX
+
+
+car_fuel_type_tbl
+-
+fuel_type_id PK int
+fuel_type string INDEX
+
+
+car_prices_tbl
+- 
+price_id PK int
+make_id int FK >- car_make_tbl.make_id
+model_id int FK >- car_model_tbl.model_id
+year_id int FK >- car_year_tbl.year_id
+colour_id int FK >- car_colour_tbl.colour_id
+gear_id int FK >- car_gear_tbl.gear_id
+fuel_type_id int FK >- car_fuel_type_tbl.fuel_type_id
+km string INDEX
+km_range string INDEX
+kw string INDEX
+price string INDEX
