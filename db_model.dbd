@@ -1,41 +1,37 @@
-# Modify this code to update the DB schema diagram.
-# To reset the sample schema, replace everything with
-# two dots ('..' - without quotes).
-
 car_make_tbl
 -
 make_id PK int
-make string INDEX
+make varchar(200)
 
 
 car_model_tbl
 -
 model_id PK int
-model string INDEX
+model varchar(200)
 
 
 car_year_tbl
 -
 year_id PK int
-year string INDEX
+year int
 
 
 car_colour_tbl
 -
 colour_id PK int
-colour string INDEX
+colour varchar(200)
 
 
 car_gear_tbl
 -
 gear_id PK int
-gear string INDEX
+gear varchar(200)
 
 
 car_fuel_type_tbl
 -
 fuel_type_id PK int
-fuel_type string INDEX
+fuel_type varchar(200)
 
 
 car_prices_tbl
@@ -47,7 +43,7 @@ year_id int FK >- car_year_tbl.year_id
 colour_id int FK >- car_colour_tbl.colour_id
 gear_id int FK >- car_gear_tbl.gear_id
 fuel_type_id int FK >- car_fuel_type_tbl.fuel_type_id
-km string INDEX
-km_range string INDEX
-kw string INDEX
-price string INDEX
+km varchar(200)
+km_range varchar(200)
+kw varchar(200)
+price varchar(200)
