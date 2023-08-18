@@ -2,58 +2,11 @@
 -- NOTE! If you have used non-SQL datatypes in your design, you will have to change these here.
 
 
-CREATE TABLE "car_make_tbl" (
-    "make_id" int   NOT NULL,
-    "make" varchar(200)   NOT NULL,
-    CONSTRAINT "pk_car_make_tbl" PRIMARY KEY (
-        "make_id"
-     )
-);
 
-CREATE TABLE "car_model_tbl" (
-    "model_id" int   NOT NULL,
-    "model" varchar(200)   NOT NULL,
-    CONSTRAINT "pk_car_model_tbl" PRIMARY KEY (
-        "model_id"
-     )
-);
-
-CREATE TABLE "car_year_tbl" (
-    "year_id" int   NOT NULL,
-    "year" int   NOT NULL,
-    CONSTRAINT "pk_car_year_tbl" PRIMARY KEY (
-        "year_id"
-     )
-);
-
-CREATE TABLE "car_colour_tbl" (
-    "colour_id" int   NOT NULL,
-    "colour" varchar(200)   NOT NULL,
-    CONSTRAINT "pk_car_colour_tbl" PRIMARY KEY (
-        "colour_id"
-     )
-);
-
-CREATE TABLE "car_gear_tbl" (
-    "gear_id" int   NOT NULL,
-    "gear" varchar(200)   NOT NULL,
-    CONSTRAINT "pk_car_gear_tbl" PRIMARY KEY (
-        "gear_id"
-     )
-);
-
-CREATE TABLE "car_fuel_type_tbl" (
-    "fuel_type_id" int   NOT NULL,
-    "fuel_type" varchar(200)   NOT NULL,
-    CONSTRAINT "pk_car_fuel_type_tbl" PRIMARY KEY (
-        "fuel_type_id"
-     )
-);
 
 CREATE TABLE "car_prices_tbl" (
-    "price_id" int   NOT NULL,
-    "make_id" int   NOT NULL,
-    "model_id" int   NOT NULL,
+    "price_id" serial   NOT NULL,
+    "make_and_model_id" int   NOT NULL,
     "year_id" int   NOT NULL,
     "colour_id" int   NOT NULL,
     "gear_id" int   NOT NULL,

@@ -13,6 +13,8 @@ import requests
 # import psycopg2.extras module to return data as a tuple
 import psycopg2.extras
 
+import math
+
 # EXTRACT DATA: STARTS
 
 # Configure headers to send fake user agent with every request. This fixes 403 response when making a response
@@ -34,7 +36,8 @@ try:
         user = db_user,
         password = db_password,
         port = db_port
-    )    
+    )   
+
 except Exception as error:
         print(error)
         print('Could not connect to db')
@@ -43,7 +46,7 @@ except Exception as error:
 cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 # Query database to get list car make and model
-cursor.execute('SELECT make,model,autoscout_url_make, autoscout_url_model FROM car_make_and_model_tbl')
+cursor.execute('SELECT make,model,autoscout_url_make, autoscout_url_model FROM fiat_make_and_model_tbl')
 
 # Fetch data from database
 make_and_model_list_data_arr_raw = cursor.fetchall()
@@ -89,10 +92,13 @@ for i in range(0, number_of_make_and_model):
         # Get paginator
         number_of_pages_element_arr = soup.findAll('button', class_='FilteredListPagination_button__41hHM')
 
-        # Get the last number of the page
-        last_page_raw = number_of_pages_element_arr[2]
+        try:
+            # Get the last number of the page
+            last_page_raw = number_of_pages_element_arr[2]
 
-        last_page_raw = str(last_page_raw)
+            last_page_raw = str(last_page_raw)
+        except:
+            last_page_raw = None
 
         # Clean string to get number
         try:
@@ -158,6 +164,26 @@ for i in range(0, number_of_make_and_model):
                 km = km_raw[1].replace('km</span>', '')
                 km = km.replace('.', '')
                 km = km.replace(' ', '')
+                
+                km = int(km)
+
+                # km_start = km
+                # print(f'km_start: {km_start}')
+
+                # number_of_chars = len(km)
+
+                # zeros = ''
+
+                # for i in range(1, number_of_chars):
+                #     zeros = zeros + '0'
+
+                # number_to_add = '1' + zeros
+
+                # km_start = int(km_start)
+                # number_to_add = int(number_to_add)
+
+                # km_end = km_start + number_to_add
+               
 
                 # Convert item into array
                 gear_raw = vehicle_details_item_raw[1]
@@ -214,54 +240,65 @@ for i in range(0, number_of_make_and_model):
                 kw_raw = kw_raw[1].replace('</span>', '').split(' ')
 
                 kw = kw_raw[0]
+                
+                try:
+                    kw = int(kw)
+                except:
+                    kw = None
+                # Query database to the id of the year
+                cursor.execute(f'SELECT year_id FROM car_year_tbl WHERE year = {year}')
 
-                print(f'{car_make}|{car_model}|{car_colour}|{year}|{gear}|{fuel_type}|{kw}|{km}|{vehicle_price}')
+                # Fetch data from database
+                year_id = cursor.fetchall()
+                year_id = year_id[0][0]
+
+                # Query database to the id of the color
+                cursor.execute(f"SELECT colour_id FROM car_colour_tbl WHERE colour = '{car_colour}'")
+
+                # Fetch data from database
+                colour_id = cursor.fetchall()
+                colour_id = colour_id[0][0]
+
+                try:
+                    # Query database to the id of the gear
+                    cursor.execute(f"SELECT gear_id FROM car_gear_tbl WHERE gear = '{gear}'")
+                    
+                    # Fetch data from database
+                    gear_id = cursor.fetchall()
+                    gear_id = gear_id[0][0]
+                except:
+                    gear_id = 4
+
+                # Query database to the id of the gear
+                cursor.execute(f"SELECT fuel_type_id FROM car_fuel_type_tbl WHERE fuel_type = '{fuel_type}'")
+                
+                # Fetch data from database
+                fuel_type_id = cursor.fetchall()
+                fuel_type_id = fuel_type_id[0][0]
+
+                # Query database to the id of the make and model
+                cursor.execute(f"SELECT make_and_model_id FROM fiat_make_and_model_tbl  WHERE make = '{car_make}' AND model = '{car_model}'")
+
+                # Fetch data from database
+                make_and_model_id = cursor.fetchall()
+                make_and_model_id = make_and_model_id[0][0]
+
                 # EXTRACT DATA: ENDS
 
+                # print(f'{make_and_model_id}|{year_id}|{colour_id}|{gear_id}|{fuel_type_id}|{km}|{kw}|{vehicle_price}')
 
-            # Retrieve environment variables using os.environ.get('VARIABLE_NAME')
-            # db_host = os.environ.get('DB_HOST')
-            # db_name = os.environ.get('DB_NAME')
-            # db_user = os.environ.get('DB_USER')
-            # db_password = os.environ.get('DB_PASSWORD')
-            # db_port = os.environ.get('DB_PORT')
+                # LOAD DATA: STARTS
 
-            # Define database info
-            # hostname = db_host
-            # database = db_name
-            # username = db_user
-            # pwd = db_password
-            # port_id = db_port
+                # Insert data into table
+                insert_script = 'INSERT INTO car_prices_tbl (make_and_model_id, year_id, colour_id, gear_id, fuel_type_id, km, kw, price) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)'
+                insert_values = (make_and_model_id, year_id, colour_id, gear_id, fuel_type_id, km, kw, vehicle_price)
 
-            # # Reset connection and cursor
-            # conn = None
-            # cursor = None
+                # Execute insert script to insert values into the table
+                cursor.execute(insert_script, insert_values)
 
-            # # Check connection
-            # try:
-            #     # Connect to database
-            #     conn = psycopg2.connect(
-            #         host = hostname,
-            #         dbname = database,
-            #         user = username,
-            #         password = pwd,
-            #         port = port_id
-            #     )
+                # Commit execution
+                conn.commit()
 
-            #     # Open a cursor to perform SQL operationa
-            #     cursor = conn.cursor()
+                counter = counter + 1
 
-            #     # Insert data into table
-            #     insert_script = 'INSERT INTO car_prices_tbl (price_id, make_id, model_id, year_id, colour_id, gear_id, fuel_type_id, km, km_range, kw, price) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-            #     insert_values = ('3', '1', '1', '16', '3', '1', '1', '20453', '20000-30000', '61', '100')
-
-            #     # Execute insert script to insert values into the table
-            #     cursor.execute(insert_script, insert_values)
-
-            #     # Commit execution
-            #     conn.commit()
-            #     print('Added to db')
-
-            # except Exception as error:
-            #         print(error)
-            #         print('Could not connect to db')
+                print(f'Records added to database: {counter}')
