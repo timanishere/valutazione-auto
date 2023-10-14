@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %} Calculate the value of your car {% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+            <div class="col md-12">
+                Make: {{ make }}<br>
+                Model: {{ model }}<br>
+                Colour: {{ colour }}<br>
+                Fuel Type: {{ fuel_type }}<br>
+                Year: {{ year }}<br>
+                Gear: {{ gear }}<br>
+                Kilometers: {{ kilometers }}<br>
+                <h3>Estimated Value: {{ estimated_value }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

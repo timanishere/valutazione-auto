@@ -51,7 +51,7 @@ make_and_model_list_data_arr_raw = cursor.fetchall()
 number_of_make_and_model = len(make_and_model_list_data_arr_raw)
 
 # Loop through every make and model
-for i in range(0, number_of_make_and_model):
+for i in range(66, number_of_make_and_model):
 
    # Get make and model details from DB
    car_make = make_and_model_list_data_arr_raw[i][0]
@@ -118,7 +118,9 @@ for i in range(0, number_of_make_and_model):
          except:
 
             total_cars_container = soup.find('div', class_='ListHeader_top__jY34N')
-            total_cars_container = total_cars_container.find('div', class_='NoResults_wrapper__hQZGf')
+
+            if total_cars_container is not None:
+               total_cars_container = total_cars_container.find('div', class_='NoResults_wrapper__hQZGf')
 
             # Extract the number
             total_cars_container = total_cars_container.find('h1')
