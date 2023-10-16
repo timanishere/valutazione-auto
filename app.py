@@ -45,12 +45,36 @@ cursor.execute('SELECT * FROM car_make_list_tbl')
 # Store car make list
 car_make_list_arr = cursor.fetchall()
 
+# Query database to get list years
+cursor.execute('SELECT * FROM car_year_tbl')
+
+# Store car make list
+car_year_list_arr = cursor.fetchall()
+
+# Query database to get list of colours
+cursor.execute('SELECT colour FROM car_colour_tbl ORDER BY colour')
+
+# Store car make list
+car_colour_list_arr = cursor.fetchall()
+
+# Query database to get list of gears
+cursor.execute('SELECT * FROM car_gear_tbl')
+
+# Store car make list
+car_gear_list_arr = cursor.fetchall()
+
+# Query database to get list of fuel type
+cursor.execute('SELECT * FROM car_fuel_type_tbl')
+
+# Store fuel type list
+car_fuel_type_list_arr = cursor.fetchall()
+
 # Define route
 @app.route('/valutazione-auto')
 
 # Define webpage
 def index():
-    return render_template('index.html', car_make_list_arr=car_make_list_arr)
+    return render_template('index.html', car_make_list_arr=car_make_list_arr, car_year_list_arr=car_year_list_arr, car_colour_list_arr=car_colour_list_arr, car_gear_list_arr=car_gear_list_arr, car_fuel_type_list_arr=car_fuel_type_list_arr)
 
 # Define route called process
 @app.route('/process', methods = ['POST'])
@@ -85,19 +109,9 @@ def process():
 
     car_model_list = cursor.fetchall()
 
-    print(car_model_list)
-
     return car_model_list
 
-    # car_model_list = jsonify(car_model_list)
 
-    # print(car_model_list)
-    # # print(query_results_arr)
-
-    # print(car_make_val)
-
-    # # return render_template('index.html')
-    # return car_model_list
     
 # Create route for getting data
 @app.route('/valutazione-auto/risultato', methods = ['POST'])

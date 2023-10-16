@@ -28,10 +28,9 @@
                         <label for="year">Year:</label>
                         <select class="form-control" id="year" name="year" required>
                             <option value="">Select a Year</option>
-                            <option value="2016">2016</option>
-                            <option value="2017">2017</option>
-                            <option value="2018">2018</option>
-                            <option value="2014">2014</option>
+                            {% for car_year in car_year_list_arr %}
+                                <option value="{{ car_year[1] }}">{{ car_year[1] }}</option>
+                            {% endfor %}
                         </select>
                       </div>
 
@@ -39,9 +38,9 @@
                         <label for="colour">Colour:</label>
                         <select class="form-control" id="colour" name="colour" required>
                             <option value="">Select a colour</option>
-                            <option value="bianco">Bianco</option>
-                            <option value="Black">Black</option>
-                            <option value="Grey">Grey</option>
+                            {% for car_colour in car_colour_list_arr %}
+                                <option value="{{ car_colour[0] }}">{{ car_colour[0] }}</option>
+                            {% endfor %}
                         </select>
                       </div>
 
@@ -49,8 +48,9 @@
                         <label for="gear">Gear:</label>
                         <select class="form-control" id="gear" name="gear" required>
                             <option value="">Select a gear</option>
-                            <option value="Automatic">Automatic</option>
-                            <option value="Manuale">Manuale</option>
+                            {% for car_gear in car_gear_list_arr %}
+                                <option value="{{ car_gear[1] }}">{{ car_gear[1] }}</option>
+                            {% endfor %}
                         </select>
                       </div>
 
@@ -58,8 +58,9 @@
                         <label for="fuelType">Fuel Type:</label>
                         <select class="form-control" id="fuelType" name="fuelType" required>
                             <option value="">Select fuel type</option>
-                            <option value="Diesel">Diesel</option>
-                            <option value="Benzina">Benzina</option>
+                            {% for car_fuel_type in car_fuel_type_list_arr %}
+                                <option value="{{ car_fuel_type[1] }}">{{ car_fuel_type[1] }}</option>
+                            {% endfor %}
                         </select>
                       </div>
                       
