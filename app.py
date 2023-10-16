@@ -129,6 +129,45 @@ def results():
         form_value_gear = request.form['gear']
         form_value_fuelType = request.form['fuelType']
         form_value_km = request.form['km']
+        
+        form_value_km_int = int(form_value_km)
+
+        # Calculated total number of characters for km
+        km_num_of_chars = len(form_value_km)
+
+        # Subtract 2. This will be used to loop number of zeros to add
+        num_of_zeros = km_num_of_chars - 2
+
+        # Set the beginning of the number to add zeros
+        km_range_y = '1'
+
+        km_range_x = ''
+
+        for x in range(num_of_zeros):
+            
+            km_range_x = km_range_x + '0'
+
+        km_range_increment = km_range_y + km_range_x
+
+        km_range_increment = int(km_range_increment)
+
+        km_range_end = km_range_increment + form_value_km_int
+
+        print(km_range_end)
+
+        # Query car_make_list_tbl to get the car make data
+        cursor.execute(f'''
+            SELECT * FROM car_make_list_tbl WHERE car_make = '{form_value_make}'
+        ''')
+
+        # Store query results
+        car_data_arr = cursor.fetchall()
+
+        # Get value from 'make_and_model_table_name' column
+        make_and_model_table_name = car_data_arr[0][3]
+
+        # Get value from 'price_table_name' column
+        price_table_name = car_data_arr[0][2]
 
         # Query database to get average price
         cursor.execute(f'''
@@ -142,8 +181,8 @@ def results():
                     ft.fuel_type,
                     cp.km,
                     cp.price
-                FROM audi_car_prices_tbl AS cp
-                JOIN audi_make_and_model_tbl AS cm
+                FROM {price_table_name} AS cp
+                JOIN {make_and_model_table_name} AS cm
                     ON cp.make_and_model_id = cm.make_and_model_id
                 JOIN car_colour_tbl AS cc
                     ON cp.colour_id = cc.colour_id
@@ -160,7 +199,8 @@ def results():
                     fuel_type = '{form_value_fuelType}' AND
                     year = {form_value_year} AND 
                     gear = '{form_value_gear}' AND
-                    km >= {form_value_km}
+                    km >= {form_value_km} AND
+                    km < {km_range_end}
             )
             
             SELECT
@@ -185,8 +225,6 @@ def results():
         query_result = cursor.fetchall()
 
         total_num_query_result = len(query_result)
-
-        print(total_num_query_result)
 
         # Check if the query produced any results
         if total_num_query_result > 0:

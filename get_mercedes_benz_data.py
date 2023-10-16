@@ -51,7 +51,7 @@ make_and_model_list_data_arr_raw = cursor.fetchall()
 number_of_make_and_model = len(make_and_model_list_data_arr_raw)
 
 # Loop through every make and model
-for i in range(66, number_of_make_and_model):
+for i in range(84, number_of_make_and_model):
 
    # Get make and model details from DB
    car_make = make_and_model_list_data_arr_raw[i][0]
