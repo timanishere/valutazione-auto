@@ -1,5 +1,5 @@
 # Import flask
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, jsonify
 
 # import psycopg2 module to connect to PostgreSQL database
 import psycopg2
@@ -39,15 +39,66 @@ except Exception as error:
 # Open a cursor to perform SQL operationan and return data as a dictionary
 cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
+# Query database to get list car makes
+cursor.execute('SELECT * FROM car_make_list_tbl')
+
+# Store car make list
+car_make_list_arr = cursor.fetchall()
+
 # Define route
 @app.route('/valutazione-auto')
 
 # Define webpage
 def index():
-    return render_template('index.html')
+    return render_template('index.html', car_make_list_arr=car_make_list_arr)
 
+# Define route called process
+@app.route('/process', methods = ['POST'])
 
+# Define function for the process route
+def process():
 
+    # Fetch json data sent from javascript
+    data = request.get_json
+
+    # Store the JSON object
+    result = data('car_make')
+
+    # Get car make value from drop down
+    car_make_val = result['car_make']
+
+    # Query car_make_list_tbl to get the car make data
+    cursor.execute(f'''
+        SELECT * FROM car_make_list_tbl WHERE car_make = '{car_make_val}'
+    ''')
+
+    # Store query results
+    query_results_arr = cursor.fetchall()
+
+    # Get value from 'make_and_model_table_name' column
+    make_and_model_table_name = query_results_arr[0][3]
+
+    # Query the cars make_and_model_tbl to return list of models
+    cursor.execute(f'''
+        SELECT model FROM {make_and_model_table_name} ORDER BY model
+    ''')
+
+    car_model_list = cursor.fetchall()
+
+    print(car_model_list)
+
+    return car_model_list
+
+    # car_model_list = jsonify(car_model_list)
+
+    # print(car_model_list)
+    # # print(query_results_arr)
+
+    # print(car_make_val)
+
+    # # return render_template('index.html')
+    # return car_model_list
+    
 # Create route for getting data
 @app.route('/valutazione-auto/risultato', methods = ['POST'])
 
@@ -56,6 +107,7 @@ def results():
     # Check if request is POST
     if request.method == 'POST':
 
+        # Get form values
         form_value_make = request.form['make']
         form_value_model = request.form['model']
         form_value_year = request.form['year']
@@ -118,19 +170,36 @@ def results():
         # Store query results
         query_result = cursor.fetchall()
 
-        # Upack data from query results
-        make = query_result[0][0]
-        model = query_result[0][1]
-        colour = query_result[0][2]
-        fuel_type = query_result[0][3]
-        year = query_result[0][4]
-        gear = query_result[0][5]
-        kilometers = form_value_km
-        estimated_value = query_result[0][6]
+        total_num_query_result = len(query_result)
 
-        print(f'Estimated value for {make} {model} {year} is {estimated_value}')
+        print(total_num_query_result)
 
-    return render_template('results.html', make=make, model=model, colour=colour, fuel_type=fuel_type, year=year, gear=gear, kilometers=kilometers, estimated_value=estimated_value)
+        # Check if the query produced any results
+        if total_num_query_result > 0:
+            # Upack data from query results
+            make = query_result[0][0]
+            model = query_result[0][1]
+            colour = query_result[0][2]
+            fuel_type = query_result[0][3]
+            year = query_result[0][4]
+            gear = query_result[0][5]
+            kilometers = form_value_km
+            estimated_value = query_result[0][6]
+
+            return render_template('results.html', make=make, model=model, colour=colour, fuel_type=fuel_type, year=year, gear=gear, kilometers=kilometers, estimated_value=estimated_value)
+        else:
+
+            make = request.form['make']
+            model = request.form['model']
+            colour = request.form['colour']
+            fuel_type =  request.form['fuelType']
+            year = request.form['year']
+            gear = request.form['gear']
+            kilometers = request.form['km']
+            estimated_value = 'No data for your criteria. Please try again later'
+
+            return render_template('results.html', make=make, model=model, colour=colour, fuel_type=fuel_type, year=year, gear=gear, kilometers=kilometers, estimated_value=estimated_value)
+
 
 # Run the app
 if __name__ == '__main__':
