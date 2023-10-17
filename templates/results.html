@@ -3,8 +3,8 @@
 {% block title %} Calculate the value of your car {% endblock %}
 
 {% block body %}
-<div class="container">
-    <div class="row">
+<div class="container" style="padding-top: 40px; padding-bottom: 40px; max-width: 600px;">
+    <!-- <div class="row">
             <div class="col md-12">
                 Make: {{ make }}<br>
                 Model: {{ model }}<br>
@@ -15,6 +15,66 @@
                 Kilometers: {{ kilometers }}<br>
                 <h3>Estimated Value: {{ estimated_value }}</h3>
             </div>
+        </div>
+    </div> -->
+    <div class="row">
+        <div class="col md-12">
+            <section style="padding-bottom: 40px">
+                <h1 class="text-center">The average price of {{ make }} {{ model }} is:</h1>
+                <h1 class="text-center" style="color: #ff5b30; font-weight: 800;">€ {{ estimated_value }}</h1>
+
+                <p class="text-center" style="font-size: 11px; font-style: italic;">*The infomation you provide is used to query our database which calculates the average price of your vehicle.</p>
+            </section>
+            
+            <section style="padding-bottom: 40px">
+                <table class="table" style="">
+                    <tbody>
+                        <tr>
+                            <th scope="col">Make</th>
+                            <td>{{ make }}</td>
+                        </tr>
+                      <tr>
+                        <th scope="row">Model</th>
+                        <td>{{ model }}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Colour</th>
+                        <td>{{ colour }}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Fuel Type</th>
+                        <td colspan="2">{{ fuel_type }}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Year</th>
+                        <td colspan="2">{{ year }}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Gear</th>
+                        <td colspan="2">{{ gear }}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Kilometers</th>
+                        <td colspan="2">{{ kilometers }}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Price</th>
+                        <td colspan="2">{{ estimated_value }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </section>
+            
+            <section style="padding-bottom: 70px">
+                <h2 class="text-center">Sell your car on TrovaloGuidalo today</h2>
+                <p class="text-center">Post free and unlimited ads on TrovaloGuidalo. Reach millions of car buyers on Italy's fastest growing online marketplace for buying and selling used cars.</p>
+
+                <div class="text-center">
+                    <a href="https://trovaloguidalo.it/registrati-ora/" target="_blank" class="btn btn-primary" style="background-color: #ff5b30; border: 0; display: block">Post a free ad</a>
+                </div>
+            </section>
+            
+            
         </div>
     </div>
 </div>

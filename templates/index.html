@@ -3,11 +3,17 @@
 {% block title %} Calculate the value of your car {% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="container" style="padding-top: 40px; padding-bottom: 40px; max-width: 600px; background-color: #eaeaea;border-radius: 10px; margin-bottom: 70px; margin-top: 40px;">
+    <div class="row">
+        <div class="col md-12">
+            <h1 class="text-center">Get a free car valuation</h1>
+            <p class="text-center">Get a valuation in seconds - it could be worth more than you think!</p>
+        </div>
+    </div>
     <div class="row">
             <div class="col md-12">
                 <form action="{{url_for('results')}}" method="POST">
-                    <div class="form-group">
+                    <div class="form-group" style="padding-bottom: 20px">
                         <label for="make">Make:</label>
                         <select class="form-control" id="make" name="make" onchange="sendData()" required>
                             <option value="">Select a make</option>
@@ -17,14 +23,14 @@
                         </select>
                       </div>
 
-                      <div class="form-group">
+                      <div class="form-group" style="padding-bottom: 20px">
                         <label for="model">Model:</label>
                         <select class="form-control" id="model" name="model" required>
                             <option value="">Select a model</option>
                         </select>
                       </div>
 
-                      <div class="form-group">
+                      <div class="form-group" style="padding-bottom: 20px">
                         <label for="year">Year:</label>
                         <select class="form-control" id="year" name="year" required>
                             <option value="">Select a Year</option>
@@ -34,7 +40,7 @@
                         </select>
                       </div>
 
-                      <div class="form-group">
+                      <div class="form-group" style="padding-bottom: 20px">
                         <label for="colour">Colour:</label>
                         <select class="form-control" id="colour" name="colour" required>
                             <option value="">Select a colour</option>
@@ -44,7 +50,7 @@
                         </select>
                       </div>
 
-                      <div class="form-group">
+                      <div class="form-group" style="padding-bottom: 20px">
                         <label for="gear">Gear:</label>
                         <select class="form-control" id="gear" name="gear" required>
                             <option value="">Select a gear</option>
@@ -54,7 +60,7 @@
                         </select>
                       </div>
 
-                      <div class="form-group">
+                      <div class="form-group" style="padding-bottom: 20px">
                         <label for="fuelType">Fuel Type:</label>
                         <select class="form-control" id="fuelType" name="fuelType" required>
                             <option value="">Select fuel type</option>
@@ -64,13 +70,13 @@
                         </select>
                       </div>
                       
-                      <div class="form-group">
+                      <div class="form-group" style="padding-bottom: 20px">
                         <label>Kilometers:</label>
                         <input type="number" name="km" placeholder="Enter the amount of kilometers" class="form-control" required>
                     </div>
 
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Get instant valuation</button>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary" style="background-color: #ff4605; border: 0">Get instant valuation</button>
                     </div>
                 </form>
             </div>

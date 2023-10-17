@@ -139,7 +139,7 @@ def results():
         num_of_zeros = km_num_of_chars - 2
 
         # Set the beginning of the number to add zeros
-        km_range_y = '1'
+        km_range_y = '5'
 
         km_range_x = ''
 
@@ -152,6 +152,8 @@ def results():
         km_range_increment = int(km_range_increment)
 
         km_range_end = km_range_increment + form_value_km_int
+
+        km_range_end = km_range_end * 1
 
         print(km_range_end)
 
