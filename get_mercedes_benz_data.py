@@ -51,7 +51,7 @@ make_and_model_list_data_arr_raw = cursor.fetchall()
 number_of_make_and_model = len(make_and_model_list_data_arr_raw)
 
 # Loop through every make and model
-for i in range(84, number_of_make_and_model):
+for i in range(121, number_of_make_and_model):
 
    # Get make and model details from DB
    car_make = make_and_model_list_data_arr_raw[i][0]
@@ -111,10 +111,11 @@ for i in range(84, number_of_make_and_model):
          try:
             total_cars_container = soup.find('div', class_='ListHeader_top__jY34N')
 
-            # Extract the number
-            total_cars_container = total_cars_container.find('h1')
-            total_cars_container = total_cars_container.find('span')
-            total_cars_container = total_cars_container.find('span').text
+            if total_cars_container is not None:
+               # Extract the number
+               total_cars_container = total_cars_container.find('h1')
+               total_cars_container = total_cars_container.find('span')
+               total_cars_container = total_cars_container.find('span').text
          except:
 
             total_cars_container = soup.find('div', class_='ListHeader_top__jY34N')
@@ -122,10 +123,10 @@ for i in range(84, number_of_make_and_model):
             if total_cars_container is not None:
                total_cars_container = total_cars_container.find('div', class_='NoResults_wrapper__hQZGf')
 
-            # Extract the number
-            total_cars_container = total_cars_container.find('h1')
-            total_cars_container = total_cars_container.find('span')
-            total_cars_container = total_cars_container.find('span').text
+               # Extract the number
+               total_cars_container = total_cars_container.find('h1')
+               total_cars_container = total_cars_container.find('span')
+               total_cars_container = total_cars_container.find('span').text
 
          # Convert to a string. Use to check how many cars there are for each criteria
          total_cars = int(total_cars_container)

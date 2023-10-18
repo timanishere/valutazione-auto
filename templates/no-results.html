@@ -7,10 +7,8 @@
     <div class="row">
         <div class="col md-12">
             <section style="padding-bottom: 40px">
-                <h1 class="text-center">The average price of {{ make }} {{ model }} is:</h1>
-                <h1 class="text-center" style="color: #ff5b30; font-weight: 800;">{{ estimated_value }}</h1>
-
-                <p class="text-center" style="font-size: 11px; font-style: italic;">*The infomation you provide is used to query our database which calculates the average price of your vehicle.</p>
+                <h1 class="text-center" style="padding-bottom: 20px">{{message}}</h1>
+                <p class="text-center" style="font-size: 11px; font-style: italic;">*The infomation you provide is used to query our database which calculates the average price of your vehicle based on the data we have available. We are currently in beta mode which means data is limited at the moment but we are continiously working on making improvements - Please try again later.</p>
             </section>
             
             <section style="padding-bottom: 40px">
@@ -43,10 +41,6 @@
                       <tr>
                         <th scope="row">Kilometers</th>
                         <td colspan="2">{{ kilometers }}</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Price</th>
-                        <td colspan="2">{{ estimated_value }}</td>
                       </tr>
                     </tbody>
                   </table>

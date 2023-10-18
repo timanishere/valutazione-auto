@@ -10,6 +10,11 @@ import psycopg2.extras
 # import 'os' to access environment variables.
 import os
 
+import locale
+
+# Set the locale to Italian
+locale.setlocale(locale.LC_ALL, 'it_IT')
+
 # Create instance of web app
 app = Flask(__name__)
 
@@ -46,7 +51,7 @@ cursor.execute('SELECT * FROM car_make_list_tbl')
 car_make_list_arr = cursor.fetchall()
 
 # Query database to get list years
-cursor.execute('SELECT * FROM car_year_tbl')
+cursor.execute('SELECT * FROM car_year_tbl ORDER BY year DESC')
 
 # Store car make list
 car_year_list_arr = cursor.fetchall()
@@ -238,7 +243,9 @@ def results():
             year = query_result[0][4]
             gear = query_result[0][5]
             kilometers = form_value_km
-            estimated_value = query_result[0][6]
+            estimated_value = locale.currency(query_result[0][6], grouping=True)
+            estimated_value = estimated_value.replace('Eu', '€')
+            estimated_value = estimated_value.replace(',00', '')
 
             return render_template('results.html', make=make, model=model, colour=colour, fuel_type=fuel_type, year=year, gear=gear, kilometers=kilometers, estimated_value=estimated_value)
         else:
@@ -250,9 +257,9 @@ def results():
             year = request.form['year']
             gear = request.form['gear']
             kilometers = request.form['km']
-            estimated_value = 'No data for your criteria. Please try again later'
+            message = 'No data for your criteria. Please try again later'
 
-            return render_template('results.html', make=make, model=model, colour=colour, fuel_type=fuel_type, year=year, gear=gear, kilometers=kilometers, estimated_value=estimated_value)
+            return render_template('no-results.html', make=make, model=model, colour=colour, fuel_type=fuel_type, year=year, gear=gear, kilometers=kilometers, message=message)
 
 
 # Run the app

@@ -3,18 +3,19 @@
 {% block title %} Calculate the value of your car {% endblock %}
 
 {% block body %}
-<div class="container" style="padding-top: 40px; padding-bottom: 40px; max-width: 600px; background-color: #eaeaea;border-radius: 10px; margin-bottom: 70px; margin-top: 40px;">
+<div class="container">
+<div class="container" style="padding-top: 40px; padding-bottom: 40px; max-width: 600px; background-color: #0f141e;border-radius: 10px; margin-bottom: 70px; margin-top: 40px;">
     <div class="row">
         <div class="col md-12">
-            <h1 class="text-center">Get a free car valuation</h1>
-            <p class="text-center">Get a valuation in seconds - it could be worth more than you think!</p>
+            <h1 class="text-center" style="color: #ffffff">Get a free car valuation</h1>
+            <p class="text-center" style="color: #ffffff">Get a valuation in seconds - it could be worth more than you think!</p>
         </div>
     </div>
     <div class="row">
             <div class="col md-12">
                 <form action="{{url_for('results')}}" method="POST">
                     <div class="form-group" style="padding-bottom: 20px">
-                        <label for="make">Make:</label>
+                        <label for="make" style="color: #ffffff">Make:</label>
                         <select class="form-control" id="make" name="make" onchange="sendData()" required>
                             <option value="">Select a make</option>
                             {% for car_make in car_make_list_arr %}
@@ -24,14 +25,14 @@
                       </div>
 
                       <div class="form-group" style="padding-bottom: 20px">
-                        <label for="model">Model:</label>
+                        <label for="model" style="color: #ffffff">Model:</label>
                         <select class="form-control" id="model" name="model" required>
                             <option value="">Select a model</option>
                         </select>
                       </div>
 
                       <div class="form-group" style="padding-bottom: 20px">
-                        <label for="year">Year:</label>
+                        <label for="year" style="color: #ffffff">Year:</label>
                         <select class="form-control" id="year" name="year" required>
                             <option value="">Select a Year</option>
                             {% for car_year in car_year_list_arr %}
@@ -41,17 +42,17 @@
                       </div>
 
                       <div class="form-group" style="padding-bottom: 20px">
-                        <label for="colour">Colour:</label>
+                        <label for="colour" style="color: #ffffff">Colour:</label>
                         <select class="form-control" id="colour" name="colour" required>
                             <option value="">Select a colour</option>
                             {% for car_colour in car_colour_list_arr %}
-                                <option value="{{ car_colour[0] }}">{{ car_colour[0] }}</option>
+                                <option value="{{ car_colour[0] }}">{{ car_colour[0].capitalize() }}</option>
                             {% endfor %}
                         </select>
                       </div>
 
                       <div class="form-group" style="padding-bottom: 20px">
-                        <label for="gear">Gear:</label>
+                        <label for="gear" style="color: #ffffff">Gear:</label>
                         <select class="form-control" id="gear" name="gear" required>
                             <option value="">Select a gear</option>
                             {% for car_gear in car_gear_list_arr %}
@@ -61,7 +62,7 @@
                       </div>
 
                       <div class="form-group" style="padding-bottom: 20px">
-                        <label for="fuelType">Fuel Type:</label>
+                        <label for="fuelType" style="color: #ffffff">Fuel Type:</label>
                         <select class="form-control" id="fuelType" name="fuelType" required>
                             <option value="">Select fuel type</option>
                             {% for car_fuel_type in car_fuel_type_list_arr %}
@@ -71,12 +72,12 @@
                       </div>
                       
                       <div class="form-group" style="padding-bottom: 20px">
-                        <label>Kilometers:</label>
+                        <label style="color: #ffffff" >Kilometers:</label>
                         <input type="number" name="km" placeholder="Enter the amount of kilometers" class="form-control" required>
                     </div>
 
                     <div class="form-group text-center">
-                        <button type="submit" class="btn btn-primary" style="background-color: #ff4605; border: 0">Get instant valuation</button>
+                        <button type="submit" class="btn btn-primary" style="background-color: #ff4605; border: 0; display: block; width: 100%;">Get instant valuation</button>
                     </div>
                 </form>
             </div>
