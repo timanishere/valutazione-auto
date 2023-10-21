@@ -82,7 +82,7 @@ def index():
     return render_template('index.html', car_make_list_arr=car_make_list_arr, car_year_list_arr=car_year_list_arr, car_colour_list_arr=car_colour_list_arr, car_gear_list_arr=car_gear_list_arr, car_fuel_type_list_arr=car_fuel_type_list_arr)
 
 # Define route called process
-@app.route('/process', methods = ['POST'])
+@app.route('/process-car-make', methods = ['POST'])
 
 # Define function for the process route
 def process():
@@ -117,7 +117,94 @@ def process():
     return car_model_list
 
 
+# Define route to process car kw
+@app.route('/process-car-kw', methods = ['POST'])
+def processKW():
     
+    # Get JSON from the endpoint
+    data = request.json
+
+    # Unpack data and create variables
+    car_make = data['car_make']
+    car_model = data['car_model']
+    car_year = data['car_year']
+    car_colour = data['car_colour']
+    car_gear = data['car_gear']
+    car_fuelType = data['car_fuelType']
+    car_km = data['car_km']
+
+    form_value_km_int = int(car_km)
+
+    # Calculated total number of characters for km
+    km_num_of_chars = len(car_km)
+
+    # Subtract 2. This will be used to loop number of zeros to add
+    num_of_zeros = km_num_of_chars - 2
+
+    # Set the beginning of the number to add zeros
+    km_range_y = '5'
+
+    km_range_x = ''
+
+    for x in range(num_of_zeros):
+        
+        km_range_x = km_range_x + '0'
+
+    km_range_increment = km_range_y + km_range_x
+
+    km_range_increment = int(km_range_increment)
+
+    km_range_end = km_range_increment + form_value_km_int
+
+    km_range_end = km_range_end * 1
+    
+    # Query car_make_list_tbl to get the car make data
+    cursor.execute(f'''
+        SELECT * FROM car_make_list_tbl WHERE car_make = '{car_make}'
+    ''')
+
+    # Store query results
+    query_results_arr = cursor.fetchall()
+
+    # Get value from 'make_and_model_table_name' column
+    make_and_model_table_name = query_results_arr[0][3]
+
+    price_table_name = query_results_arr[0][2]
+
+    # Perform query to get list of KW
+    cursor.execute(f'''
+       SELECT
+            DISTINCT cp.kw
+        FROM {price_table_name} AS cp
+        JOIN {make_and_model_table_name} AS cm
+            ON cp.make_and_model_id = cm.make_and_model_id
+        JOIN car_colour_tbl AS cc
+            ON cp.colour_id = cc.colour_id
+        JOIN car_fuel_type_tbl AS ft
+            ON cp.fuel_type_id = ft.fuel_type_id
+        JOIN car_gear_tbl AS cg
+            ON cp.gear_id = cg.gear_id
+        JOIN car_year_tbl AS cy
+            ON cp.year_id = cy.year_id
+        WHERE 
+            make = '{car_make}' AND
+            model = '{car_model}' AND
+            colour = '{car_colour}' AND
+            fuel_type = '{car_fuelType}' AND
+            year = {car_year} AND 
+            gear = '{car_gear}' AND
+            km >= {car_km} AND
+            km < {km_range_end}
+        ORDER BY kw
+    ''')
+
+    car_kw_list = cursor.fetchall()
+
+    print(car_kw_list)
+
+    return car_kw_list
+
+
 # Create route for getting data
 @app.route('/valutazione-auto/risultato', methods = ['POST'])
 
@@ -134,6 +221,7 @@ def results():
         form_value_gear = request.form['gear']
         form_value_fuelType = request.form['fuelType']
         form_value_km = request.form['km']
+        form_value_kw = request.form['kw']
         
         form_value_km_int = int(form_value_km)
 
@@ -187,7 +275,8 @@ def results():
                     cg.gear,
                     ft.fuel_type,
                     cp.km,
-                    cp.price
+                    cp.price,
+                    cp.kw
                 FROM {price_table_name} AS cp
                 JOIN {make_and_model_table_name} AS cm
                     ON cp.make_and_model_id = cm.make_and_model_id
@@ -207,7 +296,8 @@ def results():
                     year = {form_value_year} AND 
                     gear = '{form_value_gear}' AND
                     km >= {form_value_km} AND
-                    km < {km_range_end}
+                    km < {km_range_end} AND
+                    kw = {form_value_kw}
             )
             
             SELECT
@@ -217,7 +307,8 @@ def results():
                 fuel_type,
                 year,
                 gear,
-                ROUND(AVG(price)) AS price
+                ROUND(AVG(price)) AS price,
+                kw
             FROM car_prices
             GROUP BY 
                 make,
@@ -225,7 +316,8 @@ def results():
                 colour,
                 fuel_type,
                 year,
-                gear
+                gear,
+                kw
         ''')
 
         # Store query results
@@ -246,8 +338,9 @@ def results():
             estimated_value = locale.currency(query_result[0][6], grouping=True)
             estimated_value = estimated_value.replace('Eu', '€')
             estimated_value = estimated_value.replace(',00', '')
+            kw = query_result[0][7]
 
-            return render_template('results.html', make=make, model=model, colour=colour, fuel_type=fuel_type, year=year, gear=gear, kilometers=kilometers, estimated_value=estimated_value)
+            return render_template('results.html', make=make, model=model, colour=colour, fuel_type=fuel_type, year=year, gear=gear, kilometers=kilometers, estimated_value=estimated_value, kw=kw)
         else:
 
             make = request.form['make']
@@ -257,9 +350,10 @@ def results():
             year = request.form['year']
             gear = request.form['gear']
             kilometers = request.form['km']
+            kw = request.form['kw']
             message = 'No data for your criteria. Please try again later'
 
-            return render_template('no-results.html', make=make, model=model, colour=colour, fuel_type=fuel_type, year=year, gear=gear, kilometers=kilometers, message=message)
+            return render_template('no-results.html', make=make, model=model, colour=colour, fuel_type=fuel_type, year=year, gear=gear, kilometers=kilometers, message=message, kw=kw)
 
 
 # Run the app

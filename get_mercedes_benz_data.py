@@ -51,7 +51,7 @@ make_and_model_list_data_arr_raw = cursor.fetchall()
 number_of_make_and_model = len(make_and_model_list_data_arr_raw)
 
 # Loop through every make and model
-for i in range(121, number_of_make_and_model):
+for i in range(238, number_of_make_and_model):
 
    # Get make and model details from DB
    car_make = make_and_model_list_data_arr_raw[i][0]
@@ -128,8 +128,9 @@ for i in range(121, number_of_make_and_model):
                total_cars_container = total_cars_container.find('span')
                total_cars_container = total_cars_container.find('span').text
 
-         # Convert to a string. Use to check how many cars there are for each criteria
-         total_cars = int(total_cars_container)
+         if total_cars_container is not None:
+            # Convert to a string. Use to check how many cars there are for each criteria
+            total_cars = int(total_cars_container)
 
          # Skip pages that do not have any results based on the criteria
          if total_cars > 0:

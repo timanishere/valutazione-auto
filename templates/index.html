@@ -16,7 +16,7 @@
                 <form action="{{url_for('results')}}" method="POST">
                     <div class="form-group" style="padding-bottom: 20px">
                         <label for="make" style="color: #ffffff">Make:</label>
-                        <select class="form-control" id="make" name="make" onchange="sendData()" required>
+                        <select class="form-control" id="make" name="make" onchange="popluateCarMake()" required>
                             <option value="">Select a make</option>
                             {% for car_make in car_make_list_arr %}
                                 <option value="{{ car_make[1] }}">{{ car_make[1] }}</option>
@@ -70,11 +70,19 @@
                             {% endfor %}
                         </select>
                       </div>
-                      
+                    
+
                       <div class="form-group" style="padding-bottom: 20px">
                         <label style="color: #ffffff" >Kilometers:</label>
-                        <input type="number" name="km" placeholder="Enter the amount of kilometers" class="form-control" required>
+                        <input type="number" name="km" id="km" placeholder="Enter the amount of kilometers" class="form-control" required>
                     </div>
+
+                    <div class="form-group" style="padding-bottom: 20px">
+                        <label for="kw" style="color: #ffffff">KW:</label>
+                        <select class="form-control" id="kw" name="kw" onclick="populateCarKW()" required>
+                            <option value="">Select a KW</option>
+                        </select>
+                      </div>
 
                     <div class="form-group text-center">
                         <button type="submit" class="btn btn-primary" style="background-color: #ff4605; border: 0; display: block; width: 100%;">Get instant valuation</button>
